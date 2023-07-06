@@ -1,4 +1,4 @@
-package com.deborasroka.banky.model;
+package com.deborasroka.banky.modelref;
 
 import java.util.Date;
 
