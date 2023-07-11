@@ -8,7 +8,7 @@ public abstract class Account implements AccountInterface {
 	double currentBalance;
 	double availableBalance;
 	User user;
-	String accountType;
+	AccountType accountType;
 	Date accountCreationDate;
 
 }

@@ -1,5 +1,5 @@
 package com.deborasroka.banky.model;
 
-public class PersonalLoanAccount extends Account{
+public class PersonalLoanAccount extends LoanAccount{
 
 }
