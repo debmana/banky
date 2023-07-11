@@ -33,5 +33,5 @@ build/
 .vscode/
 
 ### cred ###
-/Users/deborasroka/banky/src/main/resources/application.propertiesapplication.properties
+src/main/resources/application.properties
 
