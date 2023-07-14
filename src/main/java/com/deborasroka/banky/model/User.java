@@ -1,22 +1,34 @@
 package com.deborasroka.banky.model;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 
 @Document(value="users")
 public class User {
 	
 	@Id
 	private String ID;
-
+	
+	@NotBlank
 	private String name;
+	
+	@Email  @NotBlank
+	@Indexed(unique = true)
 	private String email;
+	
+	@NotBlank
 	private String password;
+	
+	@NotBlank
 	private String userType;
-	private Date userCreationDate;
+	
+	private LocalDateTime userCreationDate;
 	
 	
 	@Override
@@ -67,10 +79,10 @@ public class User {
 	public void setUserType(String userType) {
 		this.userType = userType;
 	}
-	public Date getUserCreationDate() {
+	public LocalDateTime getUserCreationDate() {
 		return userCreationDate;
 	}
-	public void setUserCreationDate(Date userCreationDate) {
+	public void setUserCreationDate(LocalDateTime userCreationDate) {
 		this.userCreationDate = userCreationDate;
 	}
 }
