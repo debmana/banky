@@ -1,7 +1,10 @@
-package com.deborasroka.banky;
+package com.deborasroka.banky.model;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+
+
 
 @SpringBootApplication
 public class BankyApplication {
