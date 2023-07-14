@@ -1,4 +1,4 @@
-package com.deborasroka.banky.model;
+package com.deborasroka.banky.controller;
 
 import java.util.List;
 
@@ -8,6 +8,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.deborasroka.banky.model.User;
+import com.deborasroka.banky.service.UserService;
 
 
 
@@ -21,18 +24,14 @@ public class UserController {
 	
 	@GetMapping(value="/allUsers", produces = {"application/json" })
     public List<User> list() {
-
-
         return userService.listAllUsers();
     }
 	
 
 	@PostMapping(value = "/addUser")
 	public String addUser(@RequestBody User user){
-		//user.getUserCreationDate().getTime();
 		System.out.println("USer obj:" + user + "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
 	userService.saveUser(user);
-		//repository.insert(user);
 	        return "User created successfully";
 	    }
 	
