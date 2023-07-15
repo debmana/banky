@@ -1,6 +1,8 @@
 package com.deborasroka.banky.service;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -28,6 +30,34 @@ public class UserService {
         return repository.findAll();
     }
     
+    public Optional<User> findUserByEmail(String email){
+    	
+    	return repository.findUserByEmail(email);
+    	
+    }
+    
+    public Optional<User> findUserByID(String id){
+    	
+    	return repository.findUserByID(id);
+    	
+    }
+    
+    public Optional<User> findUser(Map<String, String> params){
+    	
+    	Optional<User> result=null;
+
+       	
+       	if (params.containsKey("email")) {
+       		result= findUserByEmail(params.get("email"));
+       	} 
+       		
+    	if (params.containsKey("ID")) {
+    		result= findUserByID(params.get("ID"));
+    	}
+
+    	return result;
+    	
+    }
 
     public boolean saveUser(User user) {
     	boolean accepted = false;

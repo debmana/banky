@@ -2,6 +2,9 @@ package com.deborasroka.banky.controller;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -9,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.deborasroka.banky.model.User;
@@ -19,7 +23,6 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping("/api/v1/banky")
 public class UserController {
-	//private UserRepository repository;
 	
 	@Autowired
     UserService userService;
@@ -39,7 +42,20 @@ public class UserController {
 		} catch (Exception e) {
 			return ("Failed to save, please check fields " + e +"  "+ HttpStatus.BAD_REQUEST);
 		}
-		
 	}
 	
+    @GetMapping("/findUser")
+    public Optional<User>  getUser(@RequestParam Map<String, String> params) {
+
+        params.forEach((k,v) -> System.out.println("Key = "
+                + k + ", Value = " + v));
+        try {	
+        	return userService.findUser((params));
+        } catch (NoSuchElementException e) {
+        	System.out.println(e);
+        	return null;
+        	
+        }
+        
+    }
 }
