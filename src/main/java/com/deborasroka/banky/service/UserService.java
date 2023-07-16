@@ -76,5 +76,23 @@ public class UserService {
     	
     	return accepted;
     }
+    
+    public boolean updateUser(User user) {
+    	
+    	
+    	return true;
+    	
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
 }

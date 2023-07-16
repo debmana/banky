@@ -1,6 +1,6 @@
 package com.deborasroka.banky.model;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 public abstract class Account implements AccountInterface {
 	
@@ -9,6 +9,6 @@ public abstract class Account implements AccountInterface {
 	double availableBalance;
 	User user;
 	AccountType accountType;
-	Date accountCreationDate;
+	LocalDateTime accountCreationDate;
 
 }
