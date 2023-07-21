@@ -37,7 +37,6 @@ public class User {
 				+ userType + ", userCreationDate=" + userCreationDate + "]";
 	}
 	
-	
 	public User(String name, String email, String password, String userType) {
 		super();
 		this.name = name;

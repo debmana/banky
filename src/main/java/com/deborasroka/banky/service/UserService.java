@@ -42,6 +42,18 @@ public class UserService {
     	
     }
     
+    public User findUserByIDNoOptional(String id){
+    	
+    	try {
+    		return repository.findById(id).get();
+    	} catch (Exception e) {
+    		return null;
+    		
+    	}
+    }
+    
+    
+    
     public Optional<User> findUser(Map<String, String> params){
     	
     	Optional<User> result=null;
@@ -56,7 +68,6 @@ public class UserService {
     	}
 
     	return result;
-    	
     }
 
     public boolean saveUser(User user) {
@@ -78,10 +89,51 @@ public class UserService {
     }
     
     public boolean updateUser(User user) {
+    	boolean updateSuccess = false;
+    	Query query = new Query();
+    	query.addCriteria(Criteria.where("ID").is(user.getID()));
+    	User toUpdate = mongoTemplate.findOne(query, User.class);
     	
+    	if(user.getName()!=null){
+    		toUpdate.setName(user.getName());
+    	}
+
+    	if(user.getEmail()!=null) {
+    		toUpdate.setEmail(user.getEmail());
+    	}
     	
-    	return true;
+    	if(user.getPassword()!=null) {
+    		toUpdate.setPassword(user.getPassword());
+    	}
     	
+    	if(user.getUserType()!=null) {
+    		toUpdate.setUserType(user.getUserType());
+    	}
+    	
+    	try {
+    		mongoTemplate.save(toUpdate);
+    		updateSuccess = true;
+    	} catch(Exception e) {
+    		updateSuccess = false;
+    		System.out.println("Could not update user "+e);
+    	}
+    	
+    	return updateSuccess;
+    	
+    }
+    
+    public boolean deleteUser(String ID) {
+    	boolean done = false;
+    	
+    	try {
+    		repository.deleteById(ID);
+    		done = true;
+    	} catch (Exception e) {
+    		System.out.println("Exception trying to delete user" + e);
+    		done = false;
+    	}
+    	
+    	return done;
     }
     
     

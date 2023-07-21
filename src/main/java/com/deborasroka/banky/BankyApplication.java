@@ -12,5 +12,4 @@ public class BankyApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(BankyApplication.class, args);
 	}
-
 }

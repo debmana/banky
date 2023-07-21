@@ -20,7 +20,7 @@ public class AccountFactory {
 			break;
 		}
 		
-		return finalAccount;
+		return (CheckingAccount) finalAccount;
 		
 	}
 
