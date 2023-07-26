@@ -13,14 +13,12 @@ import org.springframework.data.mongodb.core.mapping.FieldType;
 public class Account implements AccountInterface {
 	@Id
 	private String ID;
-	private double currentBalance;
-	private double availableBalance;
+	private Double currentBalance;
+	private Double availableBalance;
 	private String userID;
 	@Field(name = "AccountType", targetType = FieldType.STRING)
 	private AccountType accountType;
 	private LocalDateTime accountCreationDate;
-	
-	
 	
 	public Account() {
 	}
@@ -56,7 +54,7 @@ public class Account implements AccountInterface {
 		return currentBalance;
 	}
 	
-	public void setCurrentBalance(double currentBalance) {
+	public void setCurrentBalance(Double currentBalance) {
 		this.currentBalance = currentBalance;
 	}
 	
@@ -64,7 +62,7 @@ public class Account implements AccountInterface {
 		return availableBalance;
 	}
 	
-	public void setAvailableBalance(double availableBalance) {
+	public void setAvailableBalance(Double availableBalance) {
 		this.availableBalance = availableBalance;
 	}
 	

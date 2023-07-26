@@ -27,63 +27,63 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping("/api/v1/banky")
 public class UserController {
-	
+
 	@Autowired
-    UserService userService;
-	
+	UserService userService;
+
 	@GetMapping(value="/allUsers", produces = {"application/json" })
-    public List<User> list() {
-        return userService.listAllUsers();
-    }
-	
+	public List<User> list() {
+		return userService.listAllUsers();
+	}
+
 
 	@PostMapping(value = "/addUser")
 	public String addUser(@Valid @RequestBody User user){
 		try {
 			user.setUserCreationDate(LocalDateTime.now());
 			System.out.println("This is the user " + user);
-				return ("Saved Successfully " + HttpStatus.CREATED);
+			return ("Saved Successfully " + HttpStatus.CREATED);
 		} catch (Exception e) {
 			return ("Failed to save, please check fields " + e +"  "+ HttpStatus.BAD_REQUEST);
 		}
 	}
-	
-    @GetMapping("/findUser")
-    public Optional<User>  getUser(@RequestParam Map<String, String> params) {
 
-        params.forEach((k,v) -> System.out.println("Key = "
-                + k + ", Value = " + v));
-        try {	
-        	return userService.findUser((params));
-        } catch (NoSuchElementException e) {
-        	System.out.println(e);
-        	return null;
-    }
-   }
-        
-     @PutMapping("/updateUser/{ID}")
-     public ResponseEntity<String> updateUser(@PathVariable String ID, @RequestBody User user){
-    	 
-    	 if (!ID.isEmpty()) {
-    		 user.setID(ID);
-    		 try {
-    			 userService.updateUser(user);
-    			 return new ResponseEntity<>("Updated sucessfully", HttpStatus.OK);
-    		 } catch(Exception e) {
-    			 System.out.println("User controller could not update request "+ e);
-    			 return new ResponseEntity<>("Update Failed", HttpStatus.CONFLICT);
-    		 }
-    	 }
-    	 return new ResponseEntity<>("Update Failed", HttpStatus.CONFLICT);
-     }
-     
+	@GetMapping("/findUser")
+	public Optional<User>  getUser(@RequestParam Map<String, String> params) {
 
-     
-     @DeleteMapping("/deleteUser/{ID}")
-     public void deleteUser(@PathVariable String ID){
+		params.forEach((k,v) -> System.out.println("Key = "
+				+ k + ", Value = " + v));
+		try {	
+			return userService.findUser((params));
+		} catch (NoSuchElementException e) {
+			System.out.println(e);
+			return null;
+		}
+	}
 
-    	 	userService.deleteUser(ID);
-    			
-    	 }
-     }
+	@PutMapping("/updateUser/{ID}")
+	public ResponseEntity<String> updateUser(@PathVariable String ID, @RequestBody User user){
+
+		if (!ID.isEmpty()) {
+			user.setID(ID);
+			try {
+				userService.updateUser(user);
+				return new ResponseEntity<>("Updated sucessfully", HttpStatus.OK);
+			} catch(Exception e) {
+				System.out.println("User controller could not update request "+ e);
+				return new ResponseEntity<>("Update Failed", HttpStatus.CONFLICT);
+			}
+		}
+		return new ResponseEntity<>("Update Failed", HttpStatus.CONFLICT);
+	}
+
+
+
+	@DeleteMapping("/deleteUser/{ID}")
+	public void deleteUser(@PathVariable String ID){
+
+		userService.deleteUser(ID);
+
+	}
+}
 

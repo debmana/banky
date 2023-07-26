@@ -11,32 +11,32 @@ import jakarta.validation.constraints.NotBlank;
 
 @Document(value="users")
 public class User {
-	
+
 	@Id
 	private String ID;
-	
+
 	@NotBlank
 	private String name;
-	
+
 	@Email  @NotBlank
 	@Indexed(unique = true)
 	private String email;
-	
+
 	@NotBlank
 	private String password;
-	
+
 	@NotBlank
 	private String userType;
-	
+
 	private LocalDateTime userCreationDate;
-	
-	
+
+
 	@Override
 	public String toString() {
 		return "User [ID=" + ID + ", name=" + name + ", email=" + email + ", Password=" + password + ", userType="
 				+ userType + ", userCreationDate=" + userCreationDate + "]";
 	}
-	
+
 	public User(String name, String email, String password, String userType) {
 		super();
 		this.name = name;
