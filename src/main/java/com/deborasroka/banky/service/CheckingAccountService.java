@@ -10,7 +10,6 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.deborasroka.banky.model.Account;
 import com.deborasroka.banky.model.CheckingAccount;
 import com.deborasroka.banky.repo.CheckingAccountRepository;
 
@@ -19,7 +18,7 @@ import com.deborasroka.banky.repo.CheckingAccountRepository;
 public class CheckingAccountService {
 	
 	@Autowired
-	private CheckingAccountRepository repository;
+	private CheckingAccountRepository rep;
 
 	@Autowired
 	private MongoTemplate mongoTemplate;
@@ -34,19 +33,19 @@ public class CheckingAccountService {
 	}
 	
 	public void save(CheckingAccount checkingAccount) {
-
-		repository.save(checkingAccount);
+		
+		rep.save(checkingAccount);
 
 	}
 	
 	public void delete(CheckingAccount checkingAccount) {
 
-		repository.delete(checkingAccount);
+		rep.delete(checkingAccount);
 	}
 	
 	public CheckingAccount findCheckingAccountByID(String id){
 
-		return repository.findById(id).get();
+		return rep.findById(id).get();
 
 	}
 	
@@ -90,25 +89,24 @@ public class CheckingAccountService {
 				}
 				
 				try {
-					if (updates.containsKey("overdraftLimitoverdraftLimit")) {
+					if (updates.containsKey("overdraftLimit")) {
 						System.out.println("Hello I am here in the try block 3 ....");
-						toUpdate.setOverdraftLimitoverdraftLimit(Double.parseDouble(updates.get("overdraftLimitoverdraftLimit")));
+						toUpdate.setOverdraftLimit(Double.parseDouble(updates.get("overdraftLimit")));
 					}
 				} catch (Exception e) {
 					System.out.println("Error trying to update current value in account service "+e);
 				}
 
-				repository.save(toUpdate);
+				rep.save(toUpdate);
 
 			} else {
 				System.out.println("The account you are trying to updade doesnt exist ");
 
 			}
 		}
-
-
-
 	}
+	
+	
 	
 	
 	
