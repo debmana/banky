@@ -24,51 +24,57 @@ public class Transaction {
 	public String getID() {
 		return ID;
 	}
+	
 	public void setID(String iD) {
 		ID = iD;
 	}
+	
 	public String getAccountID() {
 		return accountID;
 	}
+	
 	public void setAccountID(String accountID) {
 		this.accountID = accountID;
 	}
+	
 	public String getTransactionType() {
 		return transactionType;
 	}
+	
 	public void setTransactionType(String transactionType) {
 		this.transactionType = transactionType;
 	}
+	
 	public String getDescription() {
 		return description;
 	}
+	
 	public void setDescription(String description) {
 		this.description = description;
 	}
+	
 	public double getValue() {
 		return value;
 	}
+	
 	public void setValue(double value) {
 		this.value = value;
 	}
+	
 	public String getStatus() {
 		return status;
 	}
+	
 	public void setStatus(String status) {
 		this.status = status;
 	}
+	
 	public LocalDateTime getTransactionCreationDate() {
 		return transactionCreationDate;
 	}
+	
 	public void setTransactionCreationDate(LocalDateTime transactionCreationDate) {
 		this.transactionCreationDate = transactionCreationDate;
 	}
-	
-	
-	
-	
-	
-	
-	
 	
 }

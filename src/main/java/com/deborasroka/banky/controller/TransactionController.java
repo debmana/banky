@@ -32,16 +32,9 @@ public class TransactionController {
 	@GetMapping(value="/listAllTransactionsByAccount/{accountID}")
 	public List<Transaction> listAllTransactionsByAccount(@PathVariable String accountID){
 		
-		return repository.listAllTransactionsFromAccount();
+		return repository.listAllTransactionsFromAccount(accountID);
 	}
 	
-	
-	@GetMapping(value="/listAllTransactionsByUser/{userID}")
-	public List<Transaction> listAllTransactionsByUser(@PathVariable String userID){
-		
-		
-		return repository.listAllTransactionsFromUser();
-	}
 	
 	@PostMapping(value="/addTransaction")
 	public void addTransaction(@Valid @RequestBody Transaction transaction) {
