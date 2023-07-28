@@ -34,7 +34,7 @@ public class TransactionsService {
 	public List<Transaction> listAllTransactionsFromAccount(String accountID) {
 		
 		Query query = new Query();
-		query.addCriteria(Criteria.where("ID").is(accountID));
+		query.addCriteria(Criteria.where("accountID").is(accountID));
 		return mongoTemplate.find(query, Transaction.class);
 
 	}

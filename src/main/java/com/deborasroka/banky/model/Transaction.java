@@ -21,6 +21,20 @@ public class Transaction {
 
 	}
 	
+	public Transaction(String accountID, String transactionType, String description, double value, String status,
+			LocalDateTime transactionCreationDate) {
+		super();
+		this.accountID = accountID;
+		this.transactionType = transactionType;
+		this.description = description;
+		this.value = value;
+		this.status = status;
+		this.transactionCreationDate = transactionCreationDate;
+	}
+
+
+
+
 	public String getID() {
 		return ID;
 	}

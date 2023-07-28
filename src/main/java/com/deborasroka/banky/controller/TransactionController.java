@@ -2,7 +2,10 @@ package com.deborasroka.banky.controller;
 
 import java.util.List;
 import java.util.Map;
+import java.time.LocalDateTime;
 
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,6 +23,7 @@ import jakarta.validation.Valid;
 @RequestMapping("/api/v1/banky")
 public class TransactionController {
 	
+	@Autowired
 	private TransactionsService repository;
 	
 	
@@ -38,6 +42,8 @@ public class TransactionController {
 	
 	@PostMapping(value="/addTransaction")
 	public void addTransaction(@Valid @RequestBody Transaction transaction) {
+		//System.out.println("--------------------------------------------------This is the transaction "+transaction);
+		transaction.setTransactionCreationDate(LocalDateTime.now());
 		repository.createTransaction(transaction);
 	}
 	
