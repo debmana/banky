@@ -11,7 +11,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.deborasroka.banky.model.Account;
+import com.deborasroka.banky.model.Transaction;
 import com.deborasroka.banky.repo.AccountRepository;
+import com.deborasroka.banky.repo.TransactionsRepository;
 
 
 @Service
@@ -23,6 +25,10 @@ public class AccountService {
 
 	@Autowired
 	private MongoTemplate mongoTemplate;
+	
+	@Autowired
+	private TransactionsService transactionRepo;
+	
 
 
 	public List<Account> listAllAccounts() {
@@ -36,6 +42,12 @@ public class AccountService {
 	}
 
 	public void delete(Account account) {
+		
+		List<Transaction> transactions;
+		
+		transactions=(transactionRepo.listAllTransactionsFromAccount(account.getID()));
+		transactions.forEach(transaction -> transactionRepo.deleteTransaction(transaction));
+		
 
 		repository.delete(account);
 

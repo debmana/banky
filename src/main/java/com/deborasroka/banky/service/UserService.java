@@ -11,6 +11,8 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.deborasroka.banky.model.Account;
+import com.deborasroka.banky.model.CheckingAccount;
 import com.deborasroka.banky.model.User;
 import com.deborasroka.banky.repo.UserRepository;
 
@@ -25,6 +27,13 @@ public class UserService {
 	
 	@Autowired
 	private MongoTemplate mongoTemplate;
+	
+	@Autowired
+	private CheckingAccountService checkRepo;
+	
+	@Autowired
+	private AccountService accountRepo;
+
 	
     public List<User> listAllUsers() {
         return repository.findAll();
@@ -124,10 +133,20 @@ public class UserService {
     
     public boolean deleteUser(String ID) {
     	boolean done = false;
+    	List<Account> accounts;
+    	List<CheckingAccount> checkingAccounts;
     	
     	try {
     		repository.deleteById(ID);
     		done = true;
+    		
+    		accounts = accountRepo.findAccountsByUser(ID);
+    		checkingAccounts = checkRepo.findCheckingAccountsByUser(ID);
+    		
+    		accounts.forEach(account -> accountRepo.delete(account) );
+    		checkingAccounts.forEach(account -> accountRepo.delete(account) );
+    		
+    		
     	} catch (Exception e) {
     		System.out.println("Exception trying to delete user" + e);
     		done = false;

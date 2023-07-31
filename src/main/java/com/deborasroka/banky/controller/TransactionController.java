@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,7 +27,6 @@ public class TransactionController {
 	@Autowired
 	private TransactionsService repository;
 	
-	
 	@GetMapping(value="/listAllTransactions")
 	public List<Transaction> listAllTransactions(){
 		
@@ -41,10 +41,12 @@ public class TransactionController {
 	
 	
 	@PostMapping(value="/addTransaction")
-	public void addTransaction(@Valid @RequestBody Transaction transaction) {
-		//System.out.println("--------------------------------------------------This is the transaction "+transaction);
+	public HttpStatus addTransaction(@Valid @RequestBody Transaction transaction) {
 		transaction.setTransactionCreationDate(LocalDateTime.now());
-		repository.createTransaction(transaction);
+		if (repository.processTransaction(transaction)) {
+			repository.createTransaction(transaction);
+			return HttpStatus.OK;
+		} else return HttpStatus.CONFLICT;
 	}
 	
 	@PutMapping(value="/updateTransaction")

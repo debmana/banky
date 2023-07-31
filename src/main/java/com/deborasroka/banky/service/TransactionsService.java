@@ -1,5 +1,6 @@
 package com.deborasroka.banky.service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -11,6 +12,8 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.deborasroka.banky.model.AccountType;
+import com.deborasroka.banky.model.CheckingAccount;
 import com.deborasroka.banky.model.Transaction;
 import com.deborasroka.banky.repo.TransactionsRepository;
 
@@ -18,12 +21,19 @@ import com.deborasroka.banky.repo.TransactionsRepository;
 @Transactional
 public class TransactionsService {
 	
+	
+	private CheckingAccount genericAccount= new CheckingAccount();
+	
+	@Autowired
+	private CheckingAccountService checkServ;
 
 	@Autowired
 	private TransactionsRepository repository;
 
 	@Autowired
 	private MongoTemplate mongoTemplate;
+
+
 	
 	
 	public List<Transaction> listAllTransactions() {
@@ -90,11 +100,73 @@ public class TransactionsService {
 					toUpdate.setStatus(transaction.get("status"));
 				}
 				
-				repository.save(toUpdate);
+				if (processTransaction(toUpdate)) {
+					repository.save(toUpdate);
+				} else return "failed to uodate";
 		}
 		
 		return "changes saved successfully";
 		
+	}
+	
+	public boolean processTransaction (Transaction transaction) {
+		Double result = 0.0;
+		Map<String, String> update= new HashMap<>();
+		boolean canSubmit=false;
+		genericAccount = checkServ.findCheckingAccountByID(transaction.getAccountID());
+		
+		if (genericAccount!=null) {
+			result = Double.sum(transaction.getValue(), genericAccount.getAvailableBalance());
+		} else return false; 
+		
+		
+		if (genericAccount.getAccountType().equals(AccountType.SAVINGS)) {
+			
+			if (result <0) {
+			
+				return false;
+			
+			} else {
+				
+				update.put("availableBalance", Double.toString(result));
+				update.put("ID", transaction.getAccountID());
+				checkServ.updateAccount(update);
+				canSubmit=true;
+			}
+			
+		} else {
+			
+			if (genericAccount.getAccountType().equals(AccountType.CHECKING)) {
+				
+				if (result>=0) {
+					//newBalance = Double.toString((genericAccount.getAvailableBalance()) + (transaction.getValue()));
+					//System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++    Hello I am the new Balance "+newBalance);
+					update.put("availableBalance", Double.toString(result));
+					update.put("ID", transaction.getAccountID());
+					checkServ.updateAccount(update);
+					canSubmit=true;
+				
+				} else {
+
+					
+					Double overdraftResult = Double.sum(transaction.getValue(), genericAccount.getOverdraftLimit());
+					
+					if (overdraftResult<0) {
+						return false;
+					} else {
+						//newBalance = Double.toString(genericAccount.getOverdraftLimit()- transaction.getValue());
+						update.put("overdraftLimit", Double.toString(overdraftResult));
+						update.put("ID", transaction.getAccountID());
+						checkServ.updateAccount(update);
+						canSubmit=true;
+					}
+				}
+				
+			}
+			
+		}
+		
+		return canSubmit;
 	}
 	
 }
