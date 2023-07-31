@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -24,6 +25,7 @@ public class CheckingAccountService {
 	@Autowired
 	private MongoTemplate mongoTemplate;
 	
+	@Lazy
 	@Autowired
 	private TransactionsService transactionRepo;
 	

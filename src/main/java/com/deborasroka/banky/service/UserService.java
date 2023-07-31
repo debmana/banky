@@ -11,6 +11,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+
 import com.deborasroka.banky.model.Account;
 import com.deborasroka.banky.model.CheckingAccount;
 import com.deborasroka.banky.model.User;
@@ -33,6 +34,9 @@ public class UserService {
 	
 	@Autowired
 	private AccountService accountRepo;
+	
+	
+	//private TransactionsService transactionRepo;
 
 	
     public List<User> listAllUsers() {
