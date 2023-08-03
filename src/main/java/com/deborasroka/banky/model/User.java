@@ -1,6 +1,8 @@
 package com.deborasroka.banky.model;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -29,6 +31,8 @@ public class User {
 	private String userType;
 
 	private LocalDateTime userCreationDate;
+	
+	private Set<Role> roles = new HashSet<>();
 
 
 	@Override
@@ -84,4 +88,14 @@ public class User {
 	public void setUserCreationDate(LocalDateTime userCreationDate) {
 		this.userCreationDate = userCreationDate;
 	}
+
+	public Set<Role> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(Set<Role> roles) {
+		this.roles = roles;
+	}
+	
+	
 }

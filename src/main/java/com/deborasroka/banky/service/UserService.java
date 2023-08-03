@@ -95,6 +95,7 @@ public class UserService {
     	
     	if (users.isEmpty()) {
     		accepted = true;
+    		
     		repository.save(user);
     	}
     	

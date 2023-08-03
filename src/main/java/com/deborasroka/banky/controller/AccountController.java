@@ -17,7 +17,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.deborasroka.banky.model.Account;
 import com.deborasroka.banky.model.AccountType;
+import com.deborasroka.banky.model.Role;
 import com.deborasroka.banky.service.AccountService;
+import com.deborasroka.banky.service.RoleService;
 import com.deborasroka.banky.service.UserService;
 import jakarta.validation.Valid;
 
@@ -29,10 +31,19 @@ public class AccountController {
 	AccountService accountService;
 	@Autowired
 	UserService userService;
+	
+	@Autowired
+	RoleService roleService;
 
 
 	@GetMapping(value="/allAccounts", produces = {"application/json" })
 	public List<Account> list() {
+		
+		List<Role> roles = roleService.findAllRoles();
+		/* for ( Role to_print : roles) {
+			System.out.println("################################################## " +to_print.getRole());
+		} */
+		
 		return accountService.listAllAccounts();
 	}
 
