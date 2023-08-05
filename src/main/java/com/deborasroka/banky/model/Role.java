@@ -40,6 +40,11 @@ public class Role {
 	public void setRole(Roles role) {
 		this.role = role;
 	}
+
+	@Override
+	public String toString() {
+		return "Role [Id=" + Id + ", role=" + role + "]";
+	}
 	
 	
 	

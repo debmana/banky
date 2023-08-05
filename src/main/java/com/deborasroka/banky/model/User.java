@@ -7,6 +7,8 @@ import java.util.Set;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
+import org.springframework.data.mongodb.core.mapping.FieldType;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -28,20 +30,22 @@ public class User {
 	private String password;
 
 	@NotBlank
-	private String userType;
+	//private String userType;
+	@Field(name = "role", targetType = FieldType.STRING)
+	private Set<Role> userType = new HashSet<>();
 
 	private LocalDateTime userCreationDate;
 	
-	private Set<Role> roles = new HashSet<>();
+	//private Set<Role> roles = new HashSet<>();
 
 
 	@Override
 	public String toString() {
 		return "User [ID=" + ID + ", name=" + name + ", email=" + email + ", Password=" + password + ", userType="
-				+ userType + ", userCreationDate=" + userCreationDate + "]";
+				+ userType.toString() + ", userCreationDate=" + userCreationDate + "]";
 	}
 
-	public User(String name, String email, String password, String userType) {
+	public User(String name, String email, String password, Set<Role> userType) {
 		super();
 		this.name = name;
 		this.email = email;
@@ -51,6 +55,10 @@ public class User {
 
 
 
+
+	public User() {
+		// TODO Auto-generated constructor stub
+	}
 
 	public String getID() {
 		return this.ID;
@@ -76,10 +84,10 @@ public class User {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	public String getUserType() {
+	public Set<Role> getUserType() {
 		return userType;
 	}
-	public void setUserType(String userType) {
+	public void setUserType(Set<Role> userType) {
 		this.userType = userType;
 	}
 	public LocalDateTime getUserCreationDate() {
@@ -89,13 +97,6 @@ public class User {
 		this.userCreationDate = userCreationDate;
 	}
 
-	public Set<Role> getRoles() {
-		return roles;
-	}
 
-	public void setRoles(Set<Role> roles) {
-		this.roles = roles;
-	}
-	
 	
 }
