@@ -20,8 +20,7 @@ import com.deborasroka.banky.security.services.AuthTokenFilter;
 import com.deborasroka.banky.security.services.UserDetailsServiceImpl;
 
 @Configuration
-@EnableWebSecurity
-@EnableMethodSecurity(securedEnabled = false)
+@EnableMethodSecurity
 
 public class WebSecurityConfig {
 	
@@ -63,10 +62,10 @@ public class WebSecurityConfig {
 	        .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
 	        .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 	        .authorizeHttpRequests(auth -> 
-	          auth.requestMatchers("/api/v1/banky/*").permitAll()
-	             // .requestMatchers("/api/test/**").permitAll()
-	             // .anyRequest().authenticated()
-	          .anyRequest().permitAll()
+	         auth.
+	         requestMatchers("/api/v1/banky/**").authenticated().
+	         requestMatchers("/api/auth/**").permitAll()
+
 	        );
 	    
 	    http.authenticationProvider(authenticationProvider());
