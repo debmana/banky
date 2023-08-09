@@ -63,6 +63,7 @@ public class WebSecurityConfig {
 	        .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 	        .authorizeHttpRequests(auth -> 
 	         auth.
+	         requestMatchers("/api/v1/banky/findUser/**").authenticated().
 	         requestMatchers("/api/v1/banky/**").authenticated().
 	         requestMatchers("/api/auth/**").permitAll()
 

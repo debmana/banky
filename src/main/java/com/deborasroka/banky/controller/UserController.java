@@ -27,13 +27,13 @@ public class UserController {
 	@Autowired
 	UserService userService;
 
-	@GetMapping(value="/allUsers", produces = {"application/json" })
+	@GetMapping(value="/allUsers", produces = {"application/json"})
 	public List<User> list() {
 		return userService.listAllUsers();
 	}
 	
 
-	@GetMapping("/findUser")
+	@GetMapping(value="/findUser")
 	public Optional<User>  getUser(@RequestParam Map<String, String> params) {
 
 		params.forEach((k,v) -> System.out.println("Key = "
@@ -46,8 +46,8 @@ public class UserController {
 		}
 	}
 
-	@PutMapping("/updateUser/{ID}")
-	public ResponseEntity<String> updateUser(@PathVariable String ID, @RequestBody User user){
+	@PutMapping(value="/updateUser/{ID}")
+	public ResponseEntity<?> updateUser(@PathVariable String ID, @RequestBody User user){
 
 		if (!ID.isEmpty()) {
 			user.setID(ID);
@@ -64,7 +64,7 @@ public class UserController {
 
 
 
-	@DeleteMapping("/deleteUser/{ID}")
+	@DeleteMapping(value="/deleteUser/{ID}")
 	public void deleteUser(@PathVariable String ID){
 
 		userService.deleteUser(ID);
