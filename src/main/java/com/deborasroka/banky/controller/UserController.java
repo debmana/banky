@@ -30,14 +30,13 @@ public class UserController {
 	UserService userService;
 
 	@GetMapping(value="/allUsers", produces = {"application/json"})
-	@PreAuthorize("hasAuthority('ROLE_USER') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_TESTER')")
+	@PreAuthorize("hasAuthority('ROLE_USER')")
 	public List<User> list() {
 		
-		SecurityContextHolder test;
+		//SecurityContextHolder test
+		//test.getContext().getAuthentication();
 		
 		return userService.listAllUsers();
-		
-
 		
 	}
 	

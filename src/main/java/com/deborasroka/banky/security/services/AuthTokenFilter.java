@@ -41,10 +41,15 @@ public class AuthTokenFilter extends OncePerRequestFilter{
 	        String username = jwtUtils.getUserNameFromJwtToken(jwt);
 	        System.out.println("Get username here is it blank? ###################### authTokenFilter class "+this.getClass()+ "  " +username);
 
+
 	        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+	        
+	        System.out.println("Userdetials get authorities ------------------------------------ "+ userDetails.getAuthorities().toString());
+	        
 	        UsernamePasswordAuthenticationToken authentication =
 	            new UsernamePasswordAuthenticationToken(
 	                userDetails,
+	                null,
 	                userDetails.getAuthorities());
 	        
 	        authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
@@ -52,10 +57,13 @@ public class AuthTokenFilter extends OncePerRequestFilter{
 	        SecurityContextHolder.getContext().setAuthentication(authentication);
 	        
 	        for (GrantedAuthority iterable_element : authentication.getAuthorities()) {
-	        	System.out.println("These are the authorities blach aeasdasd %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% "+iterable_element);
+	        	System.out.println("JESUS baby authorities aeasdasd %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% "+iterable_element + " "+this.getClass());
 				
 			}
-	        System.out.println("These are the authorities blach aeasdasd %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%" + authentication.getDetails()); 
+	        System.out.println("These are the authorities blach aeasdasd %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%" + authentication.getDetails()+ " "+this.getClass()); 
+	        System.out.println("These are the authorities blach aeasdasd %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%" + authentication.getAuthorities().toString()+ "IS Authenticated: "+authentication.isAuthenticated()+" "+this.getClass()); 
+		      
+	      
 	      }
 	    } catch (Exception e) {
 	      logger.error("Cannot set user authentication: {}", e);

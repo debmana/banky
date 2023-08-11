@@ -28,8 +28,14 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     User user = userServ.findUserByEmail(email)
         .orElseThrow(() -> new UsernameNotFoundException("User Not Found with email: " + email));
 	  System.out.println("Hello I am the user retrieved in the user detains service impl class ############################## "+ this.getClass()+"  "+user.toString());
-
-    return UserDetailsImpl.build(user);
+	  
+	  UserDetails detals = UserDetailsImpl.build(user);
+	  
+	  System.out.println("This is the user details %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%" + detals.getAuthorities() +" "+this.getClass());
+	  System.out.println("This is the full user details %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%" + detals.toString() +" "+this.getClass());
+	  
+	  
+    return detals;
   }
 
 }
