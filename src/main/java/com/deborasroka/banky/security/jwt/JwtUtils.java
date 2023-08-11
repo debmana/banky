@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import com.deborasroka.banky.security.services.UserDetailsImpl;
 
@@ -15,7 +16,7 @@ import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 
-@Component
+@Service
 public class JwtUtils {
 	  private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
 
@@ -28,6 +29,9 @@ public class JwtUtils {
 	  public String generateJwtToken(Authentication authentication) {
 
 	    UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
+	    
+	    System.out.println("Hello I am here at the JWT UTILS I am the userPrincipal #############"+userPrincipal+""
+	    		+ " authentication.Pincipal" +authentication.getPrincipal().toString() + this.getClass());
 
 	    return Jwts.builder()
 	        .setSubject((userPrincipal.getUsername()))
@@ -42,9 +46,15 @@ public class JwtUtils {
 	  }
 
 	  public String getUserNameFromJwtToken(String token) {
+		  
+		  System.out.println("THis is the getUserNameFromJwtToken ########################## "+this.getClass() +" "+Jwts.parserBuilder().setSigningKey(key()).build()
+	               .parseClaimsJws(token).getBody().getSubject());
+		  
 	    return Jwts.parserBuilder().setSigningKey(key()).build()
 	               .parseClaimsJws(token).getBody().getSubject();
 	  }
+	  
+	  
 	  
 	  public boolean validateJwtToken(String authToken) {
 		    try {

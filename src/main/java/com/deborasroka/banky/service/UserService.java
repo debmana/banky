@@ -49,6 +49,17 @@ public class UserService {
     	
     }
     
+    public Boolean findUserByEmailBool(String email){
+    	
+    	if (!repository.findUserByEmail(email).isEmpty()) {
+    		
+    		return true;
+    		
+    	} else return false;
+    	
+    }
+  
+    
     public Optional<User> findUserByID(String id){
     	
     	return repository.findUserByID(id);

@@ -26,6 +26,14 @@ public class LoginRequestPayload {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+
+	@Override
+	public String toString() {
+		return "LoginRequestPayload [email=" + email + ", password=" + password + "]";
+	}
+	
+	
+	
 }
 
 

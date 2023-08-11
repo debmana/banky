@@ -13,6 +13,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -56,11 +57,23 @@ public class AuthenticationController {
 
 		Authentication authentication = authenticationManager.authenticate(
 				new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+		
+		
+		UserDetails userDetails1 = (UserDetails) authentication.getPrincipal();
+
+		System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$ Authenticatio completed $$$$$$$$$ "+"Username: "+userDetails1.getUsername()+"Password: "+	
+		userDetails1.getPassword() +"Authorities "+	
+		userDetails1.getAuthorities());
+		
+		System.out.println("############ Siging in ################ "+this.getClass() + " "+ loginRequest.getUsername()+ loginRequest.getPassword());
 
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		String jwt = jwtUtils.generateJwtToken(authentication);
 
-		UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();    
+		UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal(); 
+		
+		System.out.println("This is the user detials in the sign in method "+userDetails.toString() + " " +this.getClass());
+		
 		List<String> roles = userDetails.getAuthorities().stream()
 				.map(item -> item.getAuthority())
 				.collect(Collectors.toList());
@@ -81,6 +94,9 @@ public class AuthenticationController {
 		Set<Role> roleSet = new HashSet<Role>();
 
 		System.out.println("Hello world ###################################### "+ newUserPayload.getRole());
+		for (String role : userRoleSet) {
+		System.out.println("############### This is the motherfucking test ****************************** "+role);	
+		}
 
 
 

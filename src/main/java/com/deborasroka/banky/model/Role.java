@@ -9,7 +9,7 @@ import org.springframework.data.annotation.Id;
 public class Role {
 	
 	@Id
-	String Id;
+	private String Id;
 	
 	@Field(name = "role", targetType = FieldType.STRING)
 	private Roles role;

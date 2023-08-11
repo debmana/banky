@@ -16,9 +16,6 @@ public class UserDetailsImpl implements UserDetails {
   private static final long serialVersionUID = 1L;
 
   private String id;
-
-  private String username;
-
   private String email;
 
   @JsonIgnore
@@ -33,22 +30,34 @@ public class UserDetailsImpl implements UserDetails {
     this.password = password;
     this.authorities = authorities;
   }
+  
   public static UserDetailsImpl build(User user) {
 	    List<GrantedAuthority> authorities = user.getUserType().stream()
 	        .map(role -> new SimpleGrantedAuthority(role.getRole().name()))
 	        .collect(Collectors.toList());
-
+	    for (GrantedAuthority grantedAuthority : authorities) {
+	    	System.out.println("this is the granted authorities ######################################## " + grantedAuthority.toString() );
+		}
+	    
+	    System.out.println("This is the user filled here: User Details Impls ######################## " +user.toString());
+	    
 	    return new UserDetailsImpl(
 	        user.getID(), 
 	        user.getEmail(),
 	        user.getPassword(), 
 	        authorities);
-	  }
+	    
+  }
 
 	  @Override
 	  public Collection<? extends GrantedAuthority> getAuthorities() {
 	    return authorities;
 	  }
+	  
+	  @Override
+		public String getUsername() {
+		  return email;
+		}
 
 	  public String getId() {
 	    return id;
@@ -63,10 +72,7 @@ public class UserDetailsImpl implements UserDetails {
 	    return password;
 	  }
 
-	  @Override
-	  public String getUsername() {
-	    return username;
-	  }
+
 	  
 	  @Override
 	  public boolean isAccountNonExpired() {
@@ -97,6 +103,14 @@ public class UserDetailsImpl implements UserDetails {
 	    UserDetailsImpl user = (UserDetailsImpl) o;
 	    return Objects.equals(id, user.id);
 	  }
+
+	@Override
+	public String toString() {
+		return "UserDetailsImpl [id=" + id + " email=" + email + ", password=" + password
+				+ ", authorities=" + authorities + "]";
+	}
+
+	  
 	}
 	  
 	  

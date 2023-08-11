@@ -8,7 +8,6 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -21,8 +20,7 @@ import com.deborasroka.banky.security.services.UserDetailsServiceImpl;
 
 @Configuration
 @EnableMethodSecurity
-
-public class WebSecurityConfig {
+public class WebSecurityConfig{
 	
 	
 	@Autowired
@@ -63,9 +61,9 @@ public class WebSecurityConfig {
 	        .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 	        .authorizeHttpRequests(auth -> 
 	         auth.
-	         requestMatchers("/api/v1/banky/findUser/**").authenticated().
-	         requestMatchers("/api/v1/banky/**").authenticated().
-	         requestMatchers("/api/auth/**").permitAll()
+	         requestMatchers("/api/auth/**").permitAll().
+	         anyRequest().authenticated()
+	         
 
 	        );
 	    

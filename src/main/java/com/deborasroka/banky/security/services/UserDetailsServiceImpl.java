@@ -22,8 +22,12 @@ public class UserDetailsServiceImpl implements UserDetailsService {
   @Override
   @Transactional
   public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+
+	  
+	 System.out.println("Hello I am the weirdo email here yorelelelele ################# " + "  "+ this.getClass()+ "  " +email); 
     User user = userServ.findUserByEmail(email)
         .orElseThrow(() -> new UsernameNotFoundException("User Not Found with email: " + email));
+	  System.out.println("Hello I am the user retrieved in the user detains service impl class ############################## "+ this.getClass()+"  "+user.toString());
 
     return UserDetailsImpl.build(user);
   }

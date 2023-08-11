@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,8 +19,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.deborasroka.banky.model.User;
 import com.deborasroka.banky.service.UserService;
+import org.springframework.security.core.context.SecurityContextHolder;
 
-
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/v1/banky")
 public class UserController {
@@ -28,12 +30,20 @@ public class UserController {
 	UserService userService;
 
 	@GetMapping(value="/allUsers", produces = {"application/json"})
+	@PreAuthorize("hasAuthority('ROLE_USER') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_TESTER')")
 	public List<User> list() {
+		
+		SecurityContextHolder test;
+		
 		return userService.listAllUsers();
+		
+
+		
 	}
 	
 
 	@GetMapping(value="/findUser")
+	@PreAuthorize("hasAuthority('ROLE_USER') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_TESTER')")
 	public Optional<User>  getUser(@RequestParam Map<String, String> params) {
 
 		params.forEach((k,v) -> System.out.println("Key = "
