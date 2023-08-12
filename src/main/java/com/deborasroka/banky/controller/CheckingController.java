@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,6 +34,7 @@ public class CheckingController {
 	UserService userService;
 	
 	@PostMapping(value = "/createCheckingAccount")
+	@PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_TESTER')")
 	public String addCheckingAccount(@Valid @RequestBody CheckingAccount checkingAccount ){
 		checkingAccount.setAccountCreationDate(LocalDateTime.now());
 		//System.out.println("This is the checking account test ############################################################################ " +checkingAccount);
@@ -62,11 +64,13 @@ public class CheckingController {
 	}
 	
 	@GetMapping(value="/allCheckingAccounts", produces = {"application/json" })
+	@PreAuthorize("hasAuthority('ROLE_USER') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_TESTER')")
 	public List<CheckingAccount> list() {
 		return checkingAccountService.listAllAccounts();
 	}
 	
 	@GetMapping(value="/findCheckingAccountByID/{AccountID}")
+	@PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_TESTER')")
 	public CheckingAccount findCheckingAccountByID(@PathVariable String AccountID) {
 
 		try {
@@ -78,6 +82,7 @@ public class CheckingController {
 	}
 	
 	@GetMapping(value="/findAllAccountsByUserID/{UserID}")
+	@PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_TESTER')")
 	public List<CheckingAccount> findAccountsByUser(@PathVariable String UserID) {
 
 		try {
@@ -90,6 +95,7 @@ public class CheckingController {
 	}
 	
 	@PutMapping(value="/updateCheckingAccount")
+	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
 	public String updateCheckingAccount(@RequestBody Map<String, String> update) {
 
 		update.forEach((k,v) -> System.out.println("Key = "
@@ -101,6 +107,7 @@ public class CheckingController {
 	}
 	
 	@DeleteMapping(value="/deleteCheckingAccount/{AccountID}")
+	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
 	public Map<String, Object> deleteAccount(@PathVariable String AccountID) {
 		Map<String, Object> responseMap = new HashMap<>();
 		try {

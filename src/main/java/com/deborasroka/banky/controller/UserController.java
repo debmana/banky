@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.deborasroka.banky.model.User;
 import com.deborasroka.banky.service.UserService;
-import org.springframework.security.core.context.SecurityContextHolder;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -30,19 +29,15 @@ public class UserController {
 	UserService userService;
 
 	@GetMapping(value="/allUsers", produces = {"application/json"})
-	@PreAuthorize("hasAuthority('ROLE_USER')")
+	@PreAuthorize("hasAuthority('ROLE_USER') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_TESTER')")
 	public List<User> list() {
-		
-		//SecurityContextHolder test
-		//test.getContext().getAuthentication();
-		
 		return userService.listAllUsers();
 		
 	}
 	
 
 	@GetMapping(value="/findUser")
-	@PreAuthorize("hasAuthority('ROLE_USER') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_TESTER')")
+	@PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_TESTER')")
 	public Optional<User>  getUser(@RequestParam Map<String, String> params) {
 
 		params.forEach((k,v) -> System.out.println("Key = "
@@ -56,6 +51,7 @@ public class UserController {
 	}
 
 	@PutMapping(value="/updateUser/{ID}")
+	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
 	public ResponseEntity<?> updateUser(@PathVariable String ID, @RequestBody User user){
 
 		if (!ID.isEmpty()) {
@@ -74,6 +70,7 @@ public class UserController {
 
 
 	@DeleteMapping(value="/deleteUser/{ID}")
+	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
 	public void deleteUser(@PathVariable String ID){
 
 		userService.deleteUser(ID);

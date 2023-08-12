@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.deborasroka.banky.model.Account;
 import com.deborasroka.banky.model.AccountType;
-import com.deborasroka.banky.model.Role;
 import com.deborasroka.banky.service.AccountService;
 import com.deborasroka.banky.service.RoleService;
 import com.deborasroka.banky.service.UserService;
@@ -37,9 +37,10 @@ public class AccountController {
 
 
 	@GetMapping(value="/allAccounts", produces = {"application/json" })
+	@PreAuthorize("hasAuthority('ROLE_USER') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_TESTER')")
 	public List<Account> list() {
 		
-		List<Role> roles = roleService.findAllRoles();
+		//List<Role> roles = roleService.findAllRoles();
 		/* for ( Role to_print : roles) {
 			System.out.println("################################################## " +to_print.getRole());
 		} */
@@ -48,15 +49,12 @@ public class AccountController {
 	}
 
 	@PostMapping(value = "/createAccount")
+	@PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_TESTER')")
 	public String addAccount(@Valid @RequestBody Account account ){
 		account.setAccountCreationDate(LocalDateTime.now());
-
-
-		//System.out.println("This is the checking account test ############################################################################ " +checkingAccount);
-		//System.out.println("This is the user ID ++++++++++++++++++++++ " +userService.findUserByIDNoOptional(UserID));
+		
 		try {
-			//account.setUser(UserID);
-			//userService.findUserByIDNoOptional(account.getUserID());
+			
 			if (userService.findUserByIDNoOptional(account.getUserID())==null) {
 				System.out.println("No user was found in order to add an account ");
 				return "User ID is invalid";
@@ -80,6 +78,7 @@ public class AccountController {
 
 
 	@GetMapping(value="/findAccountByID/{AccountID}")
+	@PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_TESTER')")
 	public Account findAccountByID(@PathVariable String AccountID) {
 
 		try {
@@ -93,6 +92,7 @@ public class AccountController {
 
 
 	@GetMapping(value="/findAllAccountsByUserID/{UserID}")
+	@PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_TESTER')")
 	public List<Account> findAccountsByUser(@PathVariable String UserID) {
 
 		try {
@@ -105,6 +105,7 @@ public class AccountController {
 	}
 	
 	@GetMapping(value="/findAllSavingsAccountsByUserID/{UserID}")
+	@PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_TESTER')")
 	public List<Account> findSavingAccountsByUser(@PathVariable String UserID) {
 
 		try {
@@ -116,6 +117,7 @@ public class AccountController {
 	}
 
 	@DeleteMapping(value="/deleteAccount/{AccountID}")
+	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
 	public Map<String, Object> deleteAccount(@PathVariable String AccountID) {
 		Map<String, Object> responseMap = new HashMap<>();
 		try {
@@ -135,6 +137,7 @@ public class AccountController {
 	}
 
 	@PutMapping(value="/updateAccount")
+	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
 	public String updateAccount(@RequestBody Map<String, String> update) {
 
 		update.forEach((k,v) -> System.out.println("Key = "
