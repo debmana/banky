@@ -17,6 +17,7 @@ public class UserDetailsImpl implements UserDetails {
 
   private String id;
   private String email;
+ 
 
   @JsonIgnore
   private String password;
@@ -49,7 +50,8 @@ public class UserDetailsImpl implements UserDetails {
 	    
   }
 
-	  @Override
+
+	@Override
 	  public Collection<? extends GrantedAuthority> getAuthorities() {
 	    return authorities;
 	  }
