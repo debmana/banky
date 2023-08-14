@@ -14,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.deborasroka.banky.model.Account;
 import com.deborasroka.banky.model.Transaction;
 import com.deborasroka.banky.repo.AccountRepository;
-import com.deborasroka.banky.repo.TransactionsRepository;
 
 
 @Service
@@ -93,7 +92,6 @@ public class AccountService {
 
 				try {
 					if (updates.containsKey("availableBalance")) {
-						System.out.println("Hello I am here in the try block ....");
 						toUpdate.setAvailableBalance(Double.parseDouble(updates.get("availableBalance")));
 					}
 				} catch(Exception e) {
@@ -102,7 +100,6 @@ public class AccountService {
 
 				try {
 					if (updates.containsKey("currentBalance")) {
-						System.out.println("Hello I am here in the try block 2 ....");
 						toUpdate.setCurrentBalance(Double.parseDouble(updates.get("currentBalance")));
 					}
 				} catch (Exception e) {

@@ -9,33 +9,27 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.deborasroka.banky.model.User;
-import com.deborasroka.banky.repo.UserRepository;
 import com.deborasroka.banky.service.UserService;
 
 
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
-  @Autowired
-  UserService userServ;
+	@Autowired
+	UserService userServ;
 
-  @Override
-  @Transactional
-  public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+	@Override
+	@Transactional
+	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
-	  
-	 System.out.println("Hello I am the weirdo email here yorelelelele ################# " + "  "+ this.getClass()+ "  " +email); 
-    User user = userServ.findUserByEmail(email)
-        .orElseThrow(() -> new UsernameNotFoundException("User Not Found with email: " + email));
-	  System.out.println("Hello I am the user retrieved in the user detains service impl class ############################## "+ this.getClass()+"  "+user.toString());
-	  
-	  UserDetails detals = UserDetailsImpl.build(user);
-	  
-	  System.out.println("This is the user details %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%" + detals.getAuthorities() +" "+this.getClass());
-	  System.out.println("This is the full user details %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%" + detals.toString() +" "+this.getClass());
-	  
-	  
-    return detals;
-  }
+		User user = userServ.findUserByEmail(email)
+				.orElseThrow(() -> new UsernameNotFoundException("User Not Found with email: " + email));
+
+		UserDetails detals = UserDetailsImpl.build(user);
+
+
+
+		return detals;
+	}
 
 }

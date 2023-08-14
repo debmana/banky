@@ -13,7 +13,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -59,20 +58,12 @@ public class AuthenticationController {
 				new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
 		
 		
-		UserDetails userDetails1 = (UserDetails) authentication.getPrincipal();
-
-		System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$ Authenticatio completed $$$$$$$$$ "+"Username: "+userDetails1.getUsername()+"Password: "+	
-		userDetails1.getPassword() +"Authorities "+	
-		userDetails1.getAuthorities());
-		
-		System.out.println("############ Siging in ################ "+this.getClass() + " "+ loginRequest.getUsername()+ loginRequest.getPassword());
+		//UserDetails userDetails1 = (UserDetails) authentication.getPrincipal();
 
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		String jwt = jwtUtils.generateJwtToken(authentication);
 
 		UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal(); 
-		
-		System.out.println("This is the user detials in the sign in method "+userDetails.toString() + " " +this.getClass());
 		
 		List<String> roles = userDetails.getAuthorities().stream()
 				.map(item -> item.getAuthority())
@@ -93,13 +84,6 @@ public class AuthenticationController {
 		Role userRoleSetReady = new Role() ; 
 		Set<Role> roleSet = new HashSet<Role>();
 
-		System.out.println("Hello world ###################################### "+ newUserPayload.getRole());
-		for (String role : userRoleSet) {
-		System.out.println("############### This is the motherfucking test ****************************** "+role);	
-		}
-
-
-
 		user.setEmail(newUserPayload.getEmail());
 		user.setPassword(encoder.encode(newUserPayload.getPassword()));
 		user.setUserCreationDate(LocalDateTime.now());
@@ -112,48 +96,23 @@ public class AuthenticationController {
 				userRoleSetReady.setRole(Roles.ROLE_USER);
 
 				roleSet.add(userRoleSetReady);
-				for (Role role : roleSet) {
-					System.out.println("###############################  This is role set first block "+role.getRole() );
-				}
-
-				// System.out.println(("###############################  Final set 1 " +roleSet));
-
 			} 
 
 			if (userRoleSet.contains("ROLE_ADMIN")) {
 				adminRoleSetReady.setRole(Roles.ROLE_ADMIN);
 				roleSet.add(adminRoleSetReady);
 
-				for (Role role : roleSet) {
-					System.out.println("##############################  This is role set second block "+role.getRole() );
-				}
-
-				//System.out.println(("###############################  Final set 2 " +roleSet));
 			} 
 
 			if (userRoleSet.contains("ROLE_TESTER")) {
 				testRoleSetReady.setRole(Roles.ROLE_TESTER);
 				roleSet.add(testRoleSetReady);
-				for (Role role : roleSet) {
-					System.out.println("#############################  This is role set third block "+role.getRole() );
-				}
-
-
-
 			} 
-
-
-			for (Role role : roleSet) {
-				System.out.println("#############################  TOut of the IF block "+role.getRole() );
-			}
-			//System.out.println(("###############################  Final set 3 " +roleSet));
 
 			user.setUserType(roleSet);
 
 
 		} else return "Roles used are invalid";
-
-		System.out.println("#################################### this is the user to be saved " +user);
 
 		try { 
 			userService.saveUser(user);

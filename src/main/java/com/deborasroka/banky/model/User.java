@@ -29,7 +29,6 @@ public class User {
 	@NotBlank
 	private String password;
 
-	@NotBlank
 	//private String userType;
 	@Field(name = "role", targetType = FieldType.STRING)
 	private Set<Role> userType = new HashSet<>();

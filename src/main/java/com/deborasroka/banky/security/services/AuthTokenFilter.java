@@ -9,14 +9,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
-
 import com.deborasroka.banky.security.jwt.JwtUtils;
 
 
@@ -24,62 +22,50 @@ import com.deborasroka.banky.security.jwt.JwtUtils;
 public class AuthTokenFilter extends OncePerRequestFilter{
 
 	@Autowired
-	  private JwtUtils jwtUtils;
+	private JwtUtils jwtUtils;
 
-	  @Autowired
-	  private UserDetailsServiceImpl userDetailsService;
+	@Autowired
+	private UserDetailsServiceImpl userDetailsService;
 
-	  private static final Logger logger = LoggerFactory.getLogger(AuthTokenFilter.class);
+	private static final Logger logger = LoggerFactory.getLogger(AuthTokenFilter.class);
 
-	  @Override
-	  protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-	      throws ServletException, IOException {
-	    try {
-	      String jwt = parseJwt(request);
-	      System.out.println("parsing request #######################  "+this.getClass()+ "  " +jwt);
-	      if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
-	        String username = jwtUtils.getUserNameFromJwtToken(jwt);
-	        System.out.println("Get username here is it blank? ###################### authTokenFilter class "+this.getClass()+ "  " +username);
+	@Override
+	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+			throws ServletException, IOException {
+		try {
+			String jwt = parseJwt(request);
+			if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
+				String username = jwtUtils.getUserNameFromJwtToken(jwt);
+				UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
 
-	        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-	        
-	        System.out.println("Userdetials get authorities ------------------------------------ "+ userDetails.getAuthorities().toString());
-	        
-	        UsernamePasswordAuthenticationToken authentication =
-	            new UsernamePasswordAuthenticationToken(
-	                userDetails,
-	                null,
-	                userDetails.getAuthorities());
-	        
-	        authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
-	        SecurityContextHolder.getContext().setAuthentication(authentication);
-	        
-	        for (GrantedAuthority iterable_element : authentication.getAuthorities()) {
-	        	System.out.println("JESUS baby authorities aeasdasd %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% "+iterable_element + " "+this.getClass());
-				
+				UsernamePasswordAuthenticationToken authentication =
+						new UsernamePasswordAuthenticationToken(
+								userDetails,
+								null,
+								userDetails.getAuthorities());
+
+				authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+
+				SecurityContextHolder.getContext().setAuthentication(authentication);
+
 			}
-	        System.out.println("These are the authorities blach aeasdasd %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%" + authentication.getDetails()+ " "+this.getClass()); 
-	        System.out.println("These are the authorities blach aeasdasd %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%" + authentication.getAuthorities().toString()+ "IS Authenticated: "+authentication.isAuthenticated()+" "+this.getClass()); 
-		      
-	      
-	      }
-	    } catch (Exception e) {
-	      logger.error("Cannot set user authentication: {}", e);
-	    }
+		} catch (Exception e) {
+			logger.error("Cannot set user authentication: {}", e);
+		}
 
-	    filterChain.doFilter(request, response);
-	  }
-	  
-	  private String parseJwt(HttpServletRequest request) {
-		    String headerAuth = request.getHeader("Authorization");
+		filterChain.doFilter(request, response);
+	}
 
-		    if (StringUtils.hasText(headerAuth) && headerAuth.startsWith("Bearer ")) {
-		      return headerAuth.substring(7);
-		    }
+	private String parseJwt(HttpServletRequest request) {
+		String headerAuth = request.getHeader("Authorization");
 
-		    return null;
-		  }
+		if (StringUtils.hasText(headerAuth) && headerAuth.startsWith("Bearer ")) {
+			return headerAuth.substring(7);
+		}
+
+		return null;
+	}
 
 }

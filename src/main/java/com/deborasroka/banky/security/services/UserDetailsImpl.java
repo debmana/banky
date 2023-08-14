@@ -36,12 +36,8 @@ public class UserDetailsImpl implements UserDetails {
 	    List<GrantedAuthority> authorities = user.getUserType().stream()
 	        .map(role -> new SimpleGrantedAuthority(role.getRole().name()))
 	        .collect(Collectors.toList());
-	    for (GrantedAuthority grantedAuthority : authorities) {
-	    	System.out.println("this is the granted authorities ######################################## " + grantedAuthority.toString() );
-		}
 	    
-	    System.out.println("This is the user filled here: User Details Impls ######################## " +user.toString());
-	    
+
 	    return new UserDetailsImpl(
 	        user.getID(), 
 	        user.getEmail(),

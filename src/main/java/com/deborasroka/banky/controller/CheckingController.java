@@ -37,11 +37,8 @@ public class CheckingController {
 	@PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_TESTER')")
 	public String addCheckingAccount(@Valid @RequestBody CheckingAccount checkingAccount ){
 		checkingAccount.setAccountCreationDate(LocalDateTime.now());
-		//System.out.println("This is the checking account test ############################################################################ " +checkingAccount);
-		//System.out.println("This is the user ID ++++++++++++++++++++++ " +userService.findUserByIDNoOptional(UserID));
+
 		try {
-			//account.setUser(UserID);
-			//userService.findUserByIDNoOptional(account.getUserID());
 			if (userService.findUserByIDNoOptional(checkingAccount.getUserID())==null) {
 				System.out.println("No user was found in order to add an account ");
 				return "User ID is invalid";

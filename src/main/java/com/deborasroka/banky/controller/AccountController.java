@@ -39,12 +39,6 @@ public class AccountController {
 	@GetMapping(value="/allAccounts", produces = {"application/json" })
 	@PreAuthorize("hasAuthority('ROLE_USER') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_TESTER')")
 	public List<Account> list() {
-		
-		//List<Role> roles = roleService.findAllRoles();
-		/* for ( Role to_print : roles) {
-			System.out.println("################################################## " +to_print.getRole());
-		} */
-		
 		return accountService.listAllAccounts();
 	}
 
@@ -127,7 +121,6 @@ public class AccountController {
 			return responseMap;
 
 		} catch(Exception e) {
-			System.out.println("Exception trying to delete "+e);
 			responseMap.put("status", 404);
 			responseMap.put("message", "Failed deletion");
 			return responseMap;
