@@ -68,6 +68,12 @@ public class TransactionsService {
 		
 	}
 	
+	public String deleteTransactionByID(String transaction) {
+		repository.deleteById(transaction);
+		return "Transaction deleted";
+		
+	}
+	
 	public String updateTransaction(Map<String, String> transaction) {
 		
 		Transaction toUpdate;

@@ -68,7 +68,7 @@ public class TransactionController {
 	@DeleteMapping(value="/deleteTransaction/{transactionID}")
 	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
 	public void deleteTransaction(@PathVariable String transactionID) {
-		repository.deleteTransaction(null);
+		repository.deleteTransactionByID(transactionID);
 		
 	}
 	

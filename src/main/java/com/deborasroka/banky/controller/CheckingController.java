@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,17 +36,17 @@ public class CheckingController {
 	
 	@PostMapping(value = "/createCheckingAccount")
 	@PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_TESTER')")
-	public String addCheckingAccount(@Valid @RequestBody CheckingAccount checkingAccount ){
+	public ResponseEntity<?> addCheckingAccount(@Valid @RequestBody CheckingAccount checkingAccount ){
 		checkingAccount.setAccountCreationDate(LocalDateTime.now());
 
 		try {
 			if (userService.findUserByIDNoOptional(checkingAccount.getUserID())==null) {
 				System.out.println("No user was found in order to add an account ");
-				return "User ID is invalid";
+				return new ResponseEntity<>("User ID is invalid", HttpStatus.CONFLICT);
 			}
 		} catch (Exception e) {
 			System.out.println("No user was found in order to add an account "+e);
-			return "User ID is invalid";
+			return new ResponseEntity<> ("User ID is invalid", HttpStatus.CONFLICT);
 		}
 
 
@@ -54,9 +55,9 @@ public class CheckingController {
 		try {
 			checkingAccount.setAccountType(AccountType.CHECKING);
 			checkingAccountService.save(checkingAccount);
-			return ("Saved Successfully " + HttpStatus.CREATED);
+			return new ResponseEntity<>(checkingAccountService.findCheckingAccountsByUser(checkingAccount.getUserID()), HttpStatus.CREATED);
 		} catch (Exception e) {
-			return ("Failed to save, please check fields " + e +"  "+ HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>("Failed to save, please check fields ",  HttpStatus.BAD_REQUEST);
 		}
 	}
 	
